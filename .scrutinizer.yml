@@ -1,0 +1,28 @@
+build:
+    tests:
+        override:
+            -
+                command: 'vendor/bin/phpunit tests --configuration phpunit.xml.dist --coverage-clover=code-coverage'
+                coverage:
+                    file: 'code-coverage'
+                    format: 'clover'
+    nodes:
+        tests: true
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
+                    -
+                        command: phpcs-run
+                        use_website_config: true
+
+filter:
+    excluded_paths:
+        - 'tests/*'
+coding_style:
+    php:
+        spaces:
+            around_operators:
+                concatenation: true
+checks:
+    php: true
