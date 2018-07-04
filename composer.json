@@ -1,6 +1,7 @@
 {
     "name": "dmt-software/command-bus-validator",
-    "description": "A CommandBus middleware to validate commands using the Symfony Validator",
+    "description": "Tactician CommandBus middleware to validate commands using the Symfony Validator",
+    "keywords": ["tactician", "middleware", "symfony", "validator"],
     "type": "library",
     "license": "MIT",
     "authors": [
