@@ -19,6 +19,7 @@ build:
 filter:
     excluded_paths:
         - 'tests/*'
+        - 'vendor/*'
 coding_style:
     php:
         spaces:
