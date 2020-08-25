@@ -4,7 +4,6 @@ namespace DMT\CommandBus\Validator;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ArrayCache;
 use League\Tactician\Middleware;
@@ -65,7 +64,7 @@ class ValidationMiddleware implements Middleware
      * Get a default validator.
      *
      * By default the usage of annotations to validate object is off. To enable annotation configuration install
-     * `doctrine/annotations` and `doctrine/cache`.
+     * `doctrine/annotations`.
      *
      * @return RecursiveValidator|ValidatorInterface
      * @throws AnnotationException
@@ -74,9 +73,12 @@ class ValidationMiddleware implements Middleware
     {
         $loaders = [new StaticMethodLoader()];
 
-        if (class_exists(AnnotationReader::class) && class_exists(ArrayCache::class)) {
-            AnnotationRegistry::registerUniqueLoader('class_exists');
-            $loaders[] = new AnnotationLoader(new CachedReader(new AnnotationReader(), new ArrayCache()));
+        if (class_exists(AnnotationReader::class)) {
+            if (class_exists(ArrayCache::class)) {
+                $loaders[] = new AnnotationLoader(new CachedReader(new AnnotationReader(), new ArrayCache()));
+            } else {
+                $loaders[] = new AnnotationLoader(new AnnotationReader());
+            }
         }
 
         return (new ValidatorBuilder())
