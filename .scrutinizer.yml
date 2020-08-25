@@ -16,7 +16,6 @@ build:
                 override:
                     - php-scrutinizer-run
                     - phpcs-run
-                        command: phpcs-run
 
 filter:
     excluded_paths:
