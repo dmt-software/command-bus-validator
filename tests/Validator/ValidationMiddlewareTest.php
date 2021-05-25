@@ -44,25 +44,25 @@ class ValidationMiddlewareTest extends TestCase
     }
 
     /**
-     * @expectedException \DMT\CommandBus\Validator\ValidationException
-     * @expectedExceptionMessageRegExp ~Invalid command .* given~
-     *
      * @throws AnnotationException
      */
     public function testLoadClassMetadataValidator()
     {
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessageMatches("~Invalid command .* given~");
+
         $middleware = new ValidationMiddleware();
         $middleware->execute(new ClassMetadataCommand(), 'gettype');
     }
 
     /**
-     * @expectedException \DMT\CommandBus\Validator\ValidationException
-     * @expectedExceptionMessageRegExp ~Invalid command .* given~
-     *
      * @throws AnnotationException
      */
     public function testAnnotationReaderValidator()
     {
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessageMatches("~Invalid command .* given~");
+
         $middleware = new ValidationMiddleware();
         $middleware->execute(new AnnotationReaderCommand(), 'gettype');
     }
@@ -85,7 +85,7 @@ class ValidationMiddlewareTest extends TestCase
         try {
             $middleware = new ValidationMiddleware($validator);
             $middleware->execute(
-                new \StdClass(),
+                new \stdClass(),
                 function ($command) {
                     return $command;
                 }
