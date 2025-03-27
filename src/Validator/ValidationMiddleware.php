@@ -2,10 +2,7 @@
 
 namespace DMT\CommandBus\Validator;
 
-use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Cache\ArrayCache;
 use League\Tactician\Middleware;
 use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
@@ -22,16 +19,12 @@ use Symfony\Component\Validator\ValidatorBuilder;
  */
 class ValidationMiddleware implements Middleware
 {
-    /**
-     * @var ValidatorInterface
-     */
-    protected $validator;
+    protected ValidatorInterface|RecursiveValidator $validator;
 
     /**
      * ValidationMiddleware constructor.
      *
      * @param ValidatorInterface|null $validator
-     * @throws AnnotationException
      */
     public function __construct(ValidatorInterface $validator = null)
     {
@@ -44,7 +37,7 @@ class ValidationMiddleware implements Middleware
      *
      * @return mixed
      */
-    public function execute($command, callable $next)
+    public function execute($command, callable $next): mixed
     {
         $violations = $this->validator->validate($command);
 
@@ -60,25 +53,12 @@ class ValidationMiddleware implements Middleware
         return $next($command);
     }
 
-    /**
-     * Get a default validator.
-     *
-     * By default the usage of annotations to validate object is off. To enable annotation configuration install
-     * `doctrine/annotations`.
-     *
-     * @return RecursiveValidator|ValidatorInterface
-     * @throws AnnotationException
-     */
     protected function getDefaultValidator(): ValidatorInterface
     {
         $loaders = [new StaticMethodLoader()];
 
         if (class_exists(AnnotationReader::class)) {
-            if (class_exists(ArrayCache::class)) {
-                $loaders[] = new AnnotationLoader(new CachedReader(new AnnotationReader(), new ArrayCache()));
-            } else {
-                $loaders[] = new AnnotationLoader(new AnnotationReader());
-            }
+            $loaders[] = new AnnotationLoader(new AnnotationReader());
         }
 
         return (new ValidatorBuilder())

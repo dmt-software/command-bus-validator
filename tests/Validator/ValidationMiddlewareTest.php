@@ -6,8 +6,9 @@ use DMT\CommandBus\Validator\ValidationException;
 use DMT\CommandBus\Validator\ValidationMiddleware;
 use DMT\Test\CommandBus\Fixtures\AnnotationReaderCommand;
 use DMT\Test\CommandBus\Fixtures\ClassMetadataCommand;
-use Doctrine\Common\Annotations\AnnotationException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -19,13 +20,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class ValidationMiddlewareTest extends TestCase
 {
-    /**
-     * @throws \ReflectionException
-     * @throws AnnotationException
-     */
-    public function testValidCommand()
+    public function testValidCommand(): void
     {
-        $validator = static::getMockForAbstractClass(ValidatorInterface::class);
+        /** @var ValidatorInterface $validator */
+        $validator = static::getMockBuilder(ValidatorInterface::class)->getMock();
         $validator->expects(static::once())
             ->method('validate')
             ->willReturn(new ConstraintViolationList());
@@ -43,10 +41,7 @@ class ValidationMiddlewareTest extends TestCase
         static::assertSame($expected, $result);
     }
 
-    /**
-     * @throws AnnotationException
-     */
-    public function testLoadClassMetadataValidator()
+    public function testLoadClassMetadataValidator(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessageMatches("~Invalid command .* given~");
@@ -55,10 +50,7 @@ class ValidationMiddlewareTest extends TestCase
         $middleware->execute(new ClassMetadataCommand(), 'gettype');
     }
 
-    /**
-     * @throws AnnotationException
-     */
-    public function testAnnotationReaderValidator()
+    public function testAnnotationReaderValidator(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessageMatches("~Invalid command .* given~");
@@ -67,17 +59,11 @@ class ValidationMiddlewareTest extends TestCase
         $middleware->execute(new AnnotationReaderCommand(), 'gettype');
     }
 
-    /**
-     * @dataProvider provideConstraintViolations
-     *
-     * @param ConstraintViolationList $violations
-     *
-     * @throws \ReflectionException
-     * @throws AnnotationException
-     */
-    public function testInvalidCommand(ConstraintViolationList $violations)
+    #[DataProvider(methodName: "provideConstraintViolations")]
+    public function testInvalidCommand(ConstraintViolationList $violations): void
     {
-        $validator = static::getMockForAbstractClass(ValidatorInterface::class);
+        /** @var ValidatorInterface $validator */
+        $validator = static::getMockBuilder(ValidatorInterface::class)->getMock();
         $validator->expects(static::once())
             ->method('validate')
             ->willReturn($violations);
@@ -85,7 +71,7 @@ class ValidationMiddlewareTest extends TestCase
         try {
             $middleware = new ValidationMiddleware($validator);
             $middleware->execute(
-                new \stdClass(),
+                new stdClass(),
                 function ($command) {
                     return $command;
                 }
@@ -95,20 +81,20 @@ class ValidationMiddlewareTest extends TestCase
         }
     }
 
-    public function provideConstraintViolations(): array
+    public static function provideConstraintViolations(): array
     {
         return [
             [
                 new ConstraintViolationList(
-                    [new ConstraintViolation('missing property $foo', null, ['foo'], new \StdClass(), 'foo', null)]
+                    [new ConstraintViolation('missing property $foo', null, ['foo'], new stdClass(), 'foo', null)]
                 )
             ],
             [
                 new ConstraintViolationList(
                     [
-                        new ConstraintViolation('missing property $foo', null, ['foo'], new \StdClass(), 'foo', null),
-                        new ConstraintViolation('missing property $bar', null, ['bar'], new \StdClass(), 'bar', null),
-                        new ConstraintViolation('missing property $baz', null, ['baz'], new \StdClass(), 'baz', null),
+                        new ConstraintViolation('missing property $foo', null, ['foo'], new stdClass(), 'foo', null),
+                        new ConstraintViolation('missing property $bar', null, ['bar'], new stdClass(), 'bar', null),
+                        new ConstraintViolation('missing property $baz', null, ['baz'], new stdClass(), 'baz', null),
                     ]
                 )
             ],
