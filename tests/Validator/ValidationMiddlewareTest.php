@@ -5,6 +5,7 @@ namespace DMT\Test\CommandBus\Validator;
 use DMT\CommandBus\Validator\ValidationException;
 use DMT\CommandBus\Validator\ValidationMiddleware;
 use DMT\Test\CommandBus\Fixtures\AnnotationReaderCommand;
+use DMT\Test\CommandBus\Fixtures\AttributeReaderCommand;
 use DMT\Test\CommandBus\Fixtures\ClassMetadataCommand;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -57,6 +58,15 @@ class ValidationMiddlewareTest extends TestCase
 
         $middleware = new ValidationMiddleware();
         $middleware->execute(new AnnotationReaderCommand(), 'gettype');
+    }
+
+    public function testAttributeReaderValidator(): void
+    {
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessageMatches("~Invalid command .* given~");
+
+        $middleware = new ValidationMiddleware();
+        $middleware->execute(new AttributeReaderCommand(), 'gettype');
     }
 
     #[DataProvider(methodName: "provideConstraintViolations")]
