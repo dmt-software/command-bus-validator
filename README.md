@@ -1,8 +1,6 @@
 # Command-Bus-Validator
 
 [![Build Status](https://travis-ci.org/dmt-software/command-bus-validator.svg?branch=master)](https://travis-ci.org/dmt-software/command-bus-validator)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dmt-software/command-bus-validator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dmt-software/command-bus-validator/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/dmt-software/command-bus-validator/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/dmt-software/command-bus-validator/?branch=master)
 
 ## Install
 `composer require dmt-software/command-bus-validator`
@@ -10,9 +8,6 @@
 ## Usage
 
 ### Default usage
-
-By default this middleware uses the StaticMethodLoader of the [Symfony Validator](https://symfony.com/doc/current/components/validator.html) component. 
-If you have installed both `doctrine/annotations` and `doctrine/cache`, this default behaviour is extended with the AnnotationLoader.
 
 Configure and adding this middleware to the commandBus:
 ```php
