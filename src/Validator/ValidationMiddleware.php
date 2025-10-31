@@ -2,10 +2,9 @@
 
 namespace DMT\CommandBus\Validator;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use League\Tactician\Middleware;
 use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
-use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Validator\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Validator\Mapping\Loader\LoaderChain;
 use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
@@ -55,11 +54,7 @@ class ValidationMiddleware implements Middleware
 
     protected function getDefaultValidator(): ValidatorInterface
     {
-        $loaders = [new StaticMethodLoader()];
-
-        if (class_exists(AnnotationReader::class)) {
-            $loaders[] = new AnnotationLoader(new AnnotationReader());
-        }
+        $loaders = [new StaticMethodLoader(), new AttributeLoader()];
 
         return (new ValidatorBuilder())
             ->setMetadataFactory(

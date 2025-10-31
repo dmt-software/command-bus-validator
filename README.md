@@ -11,9 +11,6 @@
 
 ### Default usage
 
-By default this middleware uses the StaticMethodLoader of the [Symfony Validator](https://symfony.com/doc/current/components/validator.html) component. 
-If you have installed both `doctrine/annotations` and `doctrine/cache`, this default behaviour is extended with the AnnotationLoader.
-
 Configure and adding this middleware to the commandBus:
 ```php
 <?php // src/CommandBus/builder.php
