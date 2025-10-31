@@ -1,8 +1,6 @@
 # Command-Bus-Validator
 
 [![Build Status](https://travis-ci.org/dmt-software/command-bus-validator.svg?branch=master)](https://travis-ci.org/dmt-software/command-bus-validator)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dmt-software/command-bus-validator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dmt-software/command-bus-validator/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/dmt-software/command-bus-validator/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/dmt-software/command-bus-validator/?branch=master)
 
 ## Install
 `composer require dmt-software/command-bus-validator`
