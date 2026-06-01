@@ -25,7 +25,7 @@ class ValidationMiddleware implements Middleware
      *
      * @param ValidatorInterface|null $validator
      */
-    public function __construct(ValidatorInterface $validator = null)
+    public function __construct(?ValidatorInterface $validator = null)
     {
         $this->validator = $validator ?? $this->getDefaultValidator();
     }
