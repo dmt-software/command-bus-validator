@@ -14,7 +14,7 @@ class AttributeReaderCommand
         return $this->prop;
     }
 
-    public function setProp($prop): void
+    public function setProp(?string $prop): void
     {
         $this->prop = $prop;
     }
